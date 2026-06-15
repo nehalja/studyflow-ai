@@ -9,7 +9,7 @@ import StudySessions from "./pages/StudySessions";
 import Goals from "./pages/Goals";
 import Analytics from "./pages/Analytics";
 import Features from "./pages/Features";
-import StudyTips from "./pages/StudyTips";
+import StudyTips from "./pages/Studytips";
 
 function App() {
   return (
