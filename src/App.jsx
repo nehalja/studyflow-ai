@@ -8,6 +8,8 @@ import Subjects from "./pages/Subjects";
 import StudySessions from "./pages/StudySessions";
 import Goals from "./pages/Goals";
 import Analytics from "./pages/Analytics";
+import Features from "./pages/Features";
+import StudyTips from "./pages/StudyTips";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/sessions" element={<StudySessions />} />
         <Route path="/goals" element={<Goals />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/features" element={<Features />} />
+        <Route path="/study-tips" element={<StudyTips />} />
       </Routes>
     </BrowserRouter>
   );
