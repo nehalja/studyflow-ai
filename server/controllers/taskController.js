@@ -93,10 +93,37 @@ const deleteTask = async (req, res) => {
     });
   }
 };
+const getTaskStats = async (req, res) => {
+  try {
+    const tasks = await Task.find({ user: req.user.id });
 
+    const totalTasks = tasks.length;
+
+    const completedTasks = tasks.filter(
+      (task) => task.completed
+    ).length;
+
+    const pendingTasks = totalTasks - completedTasks;
+
+    const completionPercentage =
+      totalTasks === 0
+        ? 0
+        : Math.round((completedTasks / totalTasks) * 100);
+
+    res.json({
+      totalTasks,
+      completedTasks,
+      pendingTasks,
+      completionPercentage,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   createTask,
   getTasks,
   updateTask,
   deleteTask,
+  getTaskStats,
 };
