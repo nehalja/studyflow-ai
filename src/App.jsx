@@ -10,6 +10,7 @@ import Goals from "./pages/Goals";
 import Analytics from "./pages/Analytics";
 import Features from "./pages/Features";
 import StudyTips from "./pages/Studytips";
+import Task from "./pages/Task";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/features" element={<Features />} />
         <Route path="/study-tips" element={<StudyTips />} />
+        <Route path="/task" element={<Task />} />
       </Routes>
     </BrowserRouter>
   );

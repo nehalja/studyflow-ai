@@ -19,6 +19,41 @@ function SignUp() {
       setError("");
     }
   }
+  async function handleSignup() {
+  if (password !== confirmPassword) {
+    setError("Passwords do not match");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/auth/signup",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setError(data.message);
+      return;
+    }
+
+    alert("Account created successfully!");
+    navigate("/login");
+  } catch (error) {
+    setError("Something went wrong");
+  }
+}
 
   return (
     <div>
@@ -59,7 +94,9 @@ function SignUp() {
 
       <br />
 
-      <button type="button">SignUp</button>
+      <button type="button" onClick={handleSignup}>
+  SignUp
+</button>
 
       <h2>Already Have An Account?</h2>
       <button type="button" onClick={() => navigate("/login")}>
