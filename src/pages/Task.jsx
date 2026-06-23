@@ -18,6 +18,7 @@ function Tasks() {
         }
       );
 
+
       const data = await response.json();
       setTasks(data);
     } catch (error) {
@@ -90,6 +91,29 @@ function Tasks() {
     fetchTasks();
   }
 
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const token = localStorage.getItem("token");
+
+  await fetch(
+    "http://localhost:5000/api/subjects",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify({
+        name: subjectName,
+      }),
+    }
+  );
+
+  setSubjectName("");
+
+  fetchSubjects();
+};
   return (
     <div>
       <h1>Tasks</h1>
