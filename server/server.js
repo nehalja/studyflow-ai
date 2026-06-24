@@ -5,6 +5,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const subjectRoutes = require("./routes/subjectRoutes");
+const goalRoutes = require("./routes/goalRoutes");
 const cors = require("cors");
 
 dotenv.config();
@@ -17,6 +18,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/subjects", subjectRoutes);
+app.use("/api/goals", goalRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)
