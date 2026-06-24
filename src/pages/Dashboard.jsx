@@ -5,6 +5,27 @@ import "./styledashboard.css";
 function Dashboard() {
   const [stats, setStats] = useState(null);
   const navigate = useNavigate();
+  const [subjects, setSubjects] = useState([]);
+
+const fetchSubjects = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    "http://localhost:5000/api/subjects",
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+
+  const data = await response.json();
+  setSubjects(data);
+};
+
+useEffect(() => {
+  fetchSubjects();
+}, []);
 
   async function fetchStats() {
     const token = localStorage.getItem("token");
@@ -43,7 +64,7 @@ function Dashboard() {
         </div>
       
 
-      <button className="view-tasks-button"
+      <button className="view tasks-button"
         onClick={() => navigate("/task")}
       >
         Click Here To View Tasks
@@ -53,7 +74,18 @@ function Dashboard() {
         <h1 className="title">Goals</h1>
       </div>
       <div className="box subjects-box">
-        <h1 className="title">Subjects</h1>
+  <h1 className="title">Subjects</h1>
+
+  {subjects.slice(0, 3).map((subject) => (
+    <p key={subject._id}>
+      {subject.name}
+    </p>
+  ))}
+  <button className="view subject-button"
+  onClick={() => navigate("/subjects")}
+>
+  View All
+</button>
       </div>
     </div>
   </div>

@@ -10,7 +10,7 @@ const createTask = async (req, res) => {
       subject,
       priority,
       dueDate,
-      userId: req.user.userId,
+      userId: req.user.id,
     });
 
     await task.save();
@@ -31,7 +31,7 @@ const createTask = async (req, res) => {
 const getTasks = async (req, res) => {
   try {
     const tasks = await Task.find({
-      userId: req.user.userId,
+      userId: req.user.id,
     });
 
     res.status(200).json(tasks);
@@ -47,7 +47,7 @@ const updateTask = async (req, res) => {
   try {
     const task = await Task.findOne({
       _id: req.params.id,
-      userId: req.user.userId,
+      userId: req.user.id,
     });
 
     if (!task) {
@@ -73,7 +73,7 @@ const deleteTask = async (req, res) => {
   try {
     const task = await Task.findOneAndDelete({
       _id: req.params.id,
-      userId: req.user.userId,
+      userId: req.user.id,
     });
 
     if (!task) {
@@ -95,7 +95,7 @@ const deleteTask = async (req, res) => {
 };
 const getTaskStats = async (req, res) => {
   try {
-    const tasks = await Task.find({ user: req.user.id });
+    const tasks = await Task.find({ userId: req.user.id });
 
     const totalTasks = tasks.length;
 
