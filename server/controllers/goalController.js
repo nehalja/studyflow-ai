@@ -4,14 +4,15 @@ const createGoal = async (req, res) => {
   try {
     const { title, target, deadline, subjectId } = req.body;
 
-    const goal = new Goal({
-      title,
-      target,
-      deadline,
-      subjectId,
-      userId: req.user.id,
-    });
-
+  const goal = new Goal({
+  title,
+  target,
+  subjectId,
+  deadline,
+  progress: 0,
+  isCompleted: false,
+  userId: req.user.id,
+});
     await goal.save();
 
     res.status(201).json({
@@ -85,10 +86,41 @@ const deleteGoal = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const updateProgress = async (req, res) => {
+  try {
+    const { progress } = req.body;
+
+    const goal = await Goal.findById(req.params.id);
+
+    if (!goal) {
+      return res.status(404).json({
+        message: "Goal not found",
+      });
+    }
+
+    goal.progress = progress;
+
+    if (goal.progress >= goal.target) {
+      goal.progress = goal.target;
+      goal.isCompleted = true;
+    } else {
+      goal.isCompleted = false;
+    }
+
+    await goal.save();
+
+    res.json(goal);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
 
 module.exports = {
   createGoal,
   getGoals,
   updateGoal,
   deleteGoal,
+  updateProgress,
 };

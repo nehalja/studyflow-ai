@@ -115,6 +115,41 @@ const [editTarget, setEditTarget] = useState("");
   setEditingId(null);
   fetchGoals();
 };
+
+const increaseProgress = async (id) => {
+   const token = localStorage.getItem("token");
+  try {
+    const goal = goals.find(
+      (g) => g._id === id
+    );
+
+    if (goal.progress >= goal.target) {
+      return;
+    }
+
+    const response = await fetch(
+      `http://localhost:5000/api/goals/${id}/progress`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({
+          progress: goal.progress + 1,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+
+    fetchGoals();
+  } catch (error) {
+    console.log(error);
+  }
+};
   return (
     <div>
       <h1>Goals</h1>
@@ -195,9 +230,25 @@ const [editTarget, setEditTarget] = useState("");
           <h3>{goal.title}</h3>
 
           <p>
-            Progress: {goal.progress}/{goal.target}
-          </p>
+  Progress: {goal.progress}/{goal.target}
+</p>
 
+<progress
+  value={goal.progress}
+  max={goal.target}
+/>
+
+<button
+  onClick={() =>
+    increaseProgress(goal._id)
+  }
+>
+  +1
+</button>
+
+{goal.isCompleted && (
+  <p>✅ Completed</p>
+)}
           <button
             onClick={() => {
               setEditingId(goal._id);
