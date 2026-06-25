@@ -6,6 +6,7 @@ function Dashboard() {
   const [stats, setStats] = useState(null);
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState([]);
+  const [goals, setGoals] = useState([]);
 
 const fetchSubjects = async () => {
   const token = localStorage.getItem("token");
@@ -47,6 +48,26 @@ useEffect(() => {
     fetchStats();
   }, []);
 
+  const fetchGoals = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    "http://localhost:5000/api/goals",
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  setGoals(data);
+};
+useEffect(() => {
+  fetchGoals();
+}, []);
+
   return (
     <div>
       <h1 className="heading">Welcome Back!!</h1>
@@ -72,6 +93,22 @@ useEffect(() => {
       </div>
       <div className="box goals-box">
         <h1 className="title">Goals</h1>
+         {goals.slice(0, 3).map((goal) => (
+    <div key={goal._id}>
+      <p>
+        {goal.title}
+      </p>
+
+      <p>
+        {goal.progress}/{goal.target}
+      </p>
+    </div>
+  ))}
+  <button className="view goals-button"
+  onClick={() => navigate("/goals")}
+>
+  View All
+</button>
       </div>
       <div className="box subjects-box">
   <h1 className="title">Subjects</h1>
