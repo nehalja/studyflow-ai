@@ -6,6 +6,8 @@ const userRoutes = require("./routes/userRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const subjectRoutes = require("./routes/subjectRoutes");
 const goalRoutes = require("./routes/goalRoutes");
+const studySessionRoutes = require("./routes/studySessionRoutes");
+
 const cors = require("cors");
 
 dotenv.config();
@@ -19,6 +21,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/subjects", subjectRoutes);
 app.use("/api/goals", goalRoutes);
+app.use("/api/study-sessions",studySessionRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)
@@ -30,7 +33,7 @@ mongoose
     console.error(err);
   });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+app.listen(5000, () => {
+  console.log("Server running on http://localhost:5000");
 });
 
