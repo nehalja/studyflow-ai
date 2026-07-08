@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const statsRoutes = require("./routes/statsRoutes");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -22,6 +23,7 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/subjects", subjectRoutes);
 app.use("/api/goals", goalRoutes);
 app.use("/api/study-sessions",studySessionRoutes);
+app.use("/api/stats", statsRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)

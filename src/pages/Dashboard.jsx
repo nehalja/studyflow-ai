@@ -7,6 +7,8 @@ function Dashboard() {
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState([]);
   const [goals, setGoals] = useState([]);
+  const [sessions, setSessions] = useState([]);
+  const [streak, setStreak] = useState({currentStreak: 0,longestStreak: 0,});
 
 const fetchSubjects = async () => {
   const token = localStorage.getItem("token");
@@ -68,6 +70,78 @@ useEffect(() => {
   fetchGoals();
 }, []);
 
+const fetchSessions = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    "http://localhost:5000/api/study-sessions",
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  setSessions(data);
+};
+useEffect(() => {
+  fetchSessions();
+}, []);
+const totalMinutes = sessions.reduce(
+  (sum, session) =>
+    sum + session.duration,
+  0
+);
+
+const totalHours = (
+  totalMinutes / 60
+).toFixed(1);
+
+const today = new Date();
+
+today.setHours(0, 0, 0, 0);
+
+const todayMinutes = sessions
+  .filter(
+    (session) =>
+      new Date(session.createdAt) >= today
+  )
+  .reduce(
+    (sum, session) =>
+      sum + session.duration,
+    0
+  );
+
+const todayHours = (
+  todayMinutes / 60
+).toFixed(1);
+
+const fetchStreak = async () => {
+  try {
+    const token =
+      localStorage.getItem("token");
+
+    const response = await fetch(
+      "http://localhost:5000/api/stats/streak",
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    setStreak(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+useEffect(() => {
+  fetchStreak();
+}, []);
   return (
     <div>
       <h1 className="heading">Welcome Back!!</h1>
@@ -123,8 +197,49 @@ useEffect(() => {
 >
   View All
 </button>
+
       </div>
+      <div className="box sessions-box">
+  <h1 className="title">
+    Study Sessions
+  </h1>
+
+  <div className="stats-card">
+    <h2>
+      Today's Hours: {todayHours}
+    </h2>
+  </div>
+
+  <div className="stats-card">
+    <h2>
+      Total Hours: {totalHours}
+    </h2>
+  </div>
+
+  <div className="stats-card">
+    <h2>
+      Sessions: {sessions.length}
+    </h2>
+  </div>
+
+  <button
+    className="view"
+    onClick={() =>
+      navigate("/sessions")
+    }
+  >
+    View Sessions
+  </button>
+</div>
     </div>
+    <div className="stat-card">
+  <h3>🔥 Current Streak</h3>
+  <p>{streak.currentStreak} Days</p>
+</div>
+<div className="stat-card">
+  <h3>🏆 Longest Streak</h3>
+  <p>{streak.longestStreak} Days</p>
+</div>
   </div>
   );
 }
